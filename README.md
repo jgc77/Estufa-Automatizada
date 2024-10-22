@@ -12,4 +12,3 @@ Este repositório contém o **1º Projeto de Sistemas Embarcados** focado no des
 
 1. Copie as pastas **MenuLCD** e **ControleLuminosidade** para a pasta **libraries** do Arduino.
 2. O código principal está na pasta **Farm** e deve ser carregado no Arduino.
-3. 
