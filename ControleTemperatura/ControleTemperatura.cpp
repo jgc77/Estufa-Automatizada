@@ -46,17 +46,17 @@ void ControleTemperatura::atualizar() {
       return;
     }
 
-    Serial.print("Temperatura: ");
-    Serial.println(temperatura);
+    //Serial.print("Temperatura: ");
+    //Serial.println(temperatura);
 
     if (temperatura > 50) {
       digitalWrite(_pino_saida1, LOW);  // Desliga a saída 1 (pino 6)
       digitalWrite(_pino_saida2, HIGH); // Liga a saída 2 (pino 7)
-      Serial.println("Temperatura alta! Motor ligado.");
+      //Serial.println("Temperatura alta! Motor ligado.");
     } else {
       digitalWrite(_pino_saida1, LOW);  // Desliga a saída 1
       digitalWrite(_pino_saida2, LOW);  // Desliga a saída 2
-      Serial.println("Temperatura normal. Motor desligado.");
+      //Serial.println("Temperatura normal. Motor desligado.");
     }
   } else if (_modo == 1) {
     // Modo manual: controle do motor
