@@ -1,3 +1,4 @@
+#include <ControleTemperatura.h>
 #include <ControleLuminosidade.h>
 #include <MenuLCD.h>
 
@@ -9,9 +10,15 @@ const uint8_t botao2_pin = 3;
 const int pino_led = 9;
 const int pino_ldr = A0;
 
+// Definir os pinos de temperatura
+#define PINO_DHT 4
+#define PINO_SAIDA1 6
+#define PINO_SAIDA2 7
+
 // Criar instâncias das bibliotecas
 MenuLCD menu(0x27, 16, 2, botao1_pin, botao2_pin);              // Menu para o LCD 16x2
 ControleLuminosidade controleLuminosidade(pino_led, pino_ldr);  // Controle de luminosidade
+ControleTemperatura controle(PINO_DHT, PINO_SAIDA1, PINO_SAIDA2);
 
 void setup() {
   // Iniciar os módulos de menu e controle de luminosidade
@@ -27,9 +34,11 @@ void loop() {
 
   if (Serial.available() > 0) {
     String comando = Serial.readStringUntil('\n');
-    controleLuminosidade.ajustarModo(comando);
+    controleLuminosidade.ajustarModo(comando); //luminosidade
+    controle.ajustarModo(comando); //temperatura
   }
   controleLuminosidade.atualizar();
+  controle.atualizar(); //temperatura
 
   // Obter o valor da luminosidade lida pelo LDR
   int luminosidade = controleLuminosidade.lerLDR();
