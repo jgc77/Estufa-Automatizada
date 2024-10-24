@@ -13,11 +13,11 @@ void ControleLuminosidade::ajustarModo(String comando_serial) {
   comando_serial.trim(); // Remove espaços em branco ou novas linhas
   if (comando_serial == "automatico") {
     _modo = 0;
-    Serial.println("Modo automatico ativado.");
+    //Serial.println("Modo automatico ativado.");
   } 
   else if (comando_serial == "manual") {
     _modo = 1;
-    Serial.println("Modo manual ativado. Ajuste a luminosidade com valores de 0 a 100. Use 'led on' e 'led off'.");
+    Serial.println("Ajuste a luminosidade com valores de 0 a 100. Use 'led 0' e 'led 100'.");
   }
   else if (_modo == 1 && comando_serial.startsWith("led")) {
     int porcentagem = comando_serial.substring(4).toInt(); // Extrai o valor após 'led '

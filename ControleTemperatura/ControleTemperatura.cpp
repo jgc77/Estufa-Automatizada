@@ -20,7 +20,7 @@ void ControleTemperatura::ajustarModo(String comando_serial) {
   comando_serial.trim(); // Remove espaços em branco ou novas linhas
   if (comando_serial == "automatico") {
     _modo = 0;
-    Serial.println("Modo automatico ativado.");
+    //Serial.println("Modo automatico ativado.");
   } 
   else if (comando_serial == "manual") {
     _modo = 1;
