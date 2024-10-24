@@ -11,8 +11,8 @@ class ControleTemperatura {
     void atualizar();  // Função para atualizar e verificar a temperatura
   private:
     int _pino_dht;
-    int _pino_saida1;
-    int _pino_saida2;
+    uint8_t _pino_saida1;
+    uint8_t _pino_saida2;
     int _modo;  // 0 = Automático, 1 = Manual
     int _manual_motor;  // Estado manual do motor
     DHT* _dht;
