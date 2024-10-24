@@ -38,11 +38,14 @@ void loop() {
     String comando = Serial.readStringUntil('\n');
     if (comando == "automatico") {
       Serial.println("Modo automatico ativado.");
+
     } else if (comando == "manual") {
       Serial.println("Modo manual ativado");
+
     } else {
       Serial.println("Modo invalido! Escolha entre manual e automatico.");
     }
+
     controleLuminosidade.ajustarModo(comando);  //luminosidade
     controle.ajustarModo(comando);              //temperatura
   }
@@ -51,15 +54,18 @@ void loop() {
 
   // Obter o valor da luminosidade lida pelo LDR
   int luminosidade = controleLuminosidade.lerLDR();
+  int temperatura = controle.lerTemp();
 
   // Atualizar o valor da luminosidade na biblioteca de menu
   menu.setLuminosidade(luminosidade);
+  menu.setTemperatura(temperatura);
 
   // Atualizar o menu (navegação e exibição)
   menu.atualizar();
 
   // Atualizar a luminosidade na tela
   menu.atualizarLuminosidade();
+  menu.atualizarTemperatura();
 
   // Adicionar um pequeno delay para aliviar o loop
   delay(100);

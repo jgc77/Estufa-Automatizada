@@ -9,6 +9,7 @@ class ControleTemperatura {
     ControleTemperatura(int pino_dht, int pino_saida1, int pino_saida2);
     void ajustarModo(String comando_serial);  // Função para ajustar o modo
     void atualizar();  // Função para atualizar e verificar a temperatura
+    int lerTemp();  // Função para retornar a leitura da temp
   private:
     int _pino_dht;
     uint8_t _pino_saida1;

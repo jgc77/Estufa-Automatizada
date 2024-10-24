@@ -11,6 +11,7 @@ class MenuLCD {
     void iniciar();
     void atualizar();
     void atualizarLuminosidade();
+    void atualizarTemperatura();
     void setTemperatura(float temp);
     void setUmidade(float umid);
     void setLuminosidade(float lumi);

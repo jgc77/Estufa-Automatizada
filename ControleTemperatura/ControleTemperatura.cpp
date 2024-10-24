@@ -69,3 +69,8 @@ void ControleTemperatura::atualizar() {
     }
   }
 }
+
+int ControleTemperatura::lerTemp() {
+  float temperatura = _dht->readTemperature(); // Lê a temperatura em Celsius
+  return temperatura; // Retorna o valor da temperatura
+}
