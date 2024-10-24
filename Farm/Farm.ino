@@ -16,15 +16,17 @@ const uint8_t motor1 = 6;
 const uint8_t motor2 = 7;
 
 // Criar instâncias das bibliotecas
-MenuLCD menu(0x27, 16, 2, botao1, botao2);                // Menu para o LCD 16x2
+MenuLCD menu(0x27, 16, 2, botao1, botao2);               // Menu para o LCD 16x2
 ControleLuminosidade controleLuminosidade(led_uv, ldr);  // Controle de luminosidade
-ControleTemperatura controle(dht11, motor1, motor2);    // Controle de Temperatura
+ControleTemperatura controle(dht11, motor1, motor2);     // Controle de Temperatura
 
 void setup() {
   // Iniciar os módulos de menu e controle serial
   menu.iniciar();
   Serial.begin(9600);
   pinMode(5, OUTPUT);  //LED de Power
+  Serial.println("ESTUFA AUTOMATIZADA");
+  Serial.println("Bem vindo, escolha entre o modo manual e automatico.");
 }
 
 void loop() {
@@ -34,11 +36,18 @@ void loop() {
 
   if (Serial.available() > 0) {
     String comando = Serial.readStringUntil('\n');
-    controleLuminosidade.ajustarModo(comando); //luminosidade
-    controle.ajustarModo(comando); //temperatura
+    if (comando == "automatico") {
+      Serial.println("Modo automatico ativado.");
+    } else if (comando == "manual") {
+      Serial.println("Modo manual ativado");
+    } else {
+      Serial.println("Modo invalido! Escolha entre manual e automatico.");
+    }
+    controleLuminosidade.ajustarModo(comando);  //luminosidade
+    controle.ajustarModo(comando);              //temperatura
   }
   controleLuminosidade.atualizar();
-  controle.atualizar(); //temperatura
+  controle.atualizar();  //temperatura
 
   // Obter o valor da luminosidade lida pelo LDR
   int luminosidade = controleLuminosidade.lerLDR();
