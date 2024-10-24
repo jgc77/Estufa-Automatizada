@@ -4,16 +4,19 @@
 
 #define DHTTYPE DHT11  // Definindo o tipo de sensor DHT11
 
-ControleTemperatura::ControleTemperatura(int pino_dht, int pino_saida1, int pino_saida2) {
+ControleTemperatura::ControleTemperatura(int pino_dht, int pino_saida1, int pino_saida2, int pino_pwm) {
   _pino_dht = pino_dht;
   _pino_saida1 = pino_saida1;
   _pino_saida2 = pino_saida2;
+  _pino_pwm = pino_pwm;  // Pino PWM para controle do motor
   _modo = 0;  // Modo automático por padrão
   _manual_motor = LOW;
+  _pwm_atual = 0;  // Valor atual de PWM
   _dht = new DHT(_pino_dht, DHTTYPE);
   _dht->begin();  // Inicializa o sensor DHT
   pinMode(_pino_saida1, OUTPUT);
   pinMode(_pino_saida2, OUTPUT);
+  pinMode(_pino_pwm, OUTPUT);
 }
 
 void ControleTemperatura::ajustarModo(String comando_serial) {
@@ -24,7 +27,7 @@ void ControleTemperatura::ajustarModo(String comando_serial) {
   } 
   else if (comando_serial == "manual") {
     _modo = 1;
-    Serial.println("Modo manual ativado. Use 'motor on' e 'motor off'.");
+    Serial.println("Controle a ventilação com 'motor on' e 'motor off'.");
   } 
   else if (_modo == 1) {
     if (comando_serial == "motor on") {
@@ -34,6 +37,22 @@ void ControleTemperatura::ajustarModo(String comando_serial) {
       _manual_motor = LOW;
       Serial.println("Motor desligado manualmente.");
     }
+  }
+}
+
+void ControleTemperatura::ligarMotor() {
+    if (_pwm_atual == 255) {
+    return;
+  }
+  // Pino 6 low e pino 7 high ligam o motor
+  digitalWrite(_pino_saida1, LOW);
+  digitalWrite(_pino_saida2, HIGH);
+
+  // Rampa de aceleração (aumenta o PWM de 0 a 255)
+  for (int pwmValor = _pwm_atual; pwmValor <= 255; pwmValor += 5) {
+    analogWrite(_pino_pwm, pwmValor);
+    _pwm_atual = pwmValor;  // Atualiza o valor atual do PWM
+    delay(50);  // Tempo entre os incrementos para suavizar a aceleração
   }
 }
 
@@ -61,11 +80,12 @@ void ControleTemperatura::atualizar() {
   } else if (_modo == 1) {
     // Modo manual: controle do motor
     if (_manual_motor == HIGH) {
-      digitalWrite(_pino_saida1, LOW);   // Desliga a saída 1 (pino 6)
-      digitalWrite(_pino_saida2, HIGH);  // Liga a saída 2 (pino 7)
+      ligarMotor();
+      
     } else {
       digitalWrite(_pino_saida1, LOW);   // Desliga a saída 1
       digitalWrite(_pino_saida2, LOW);   // Desliga a saída 2
+      analogWrite(_pino_pwm, 0);
     }
   }
 }

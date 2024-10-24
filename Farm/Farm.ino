@@ -14,11 +14,12 @@ const int ldr = A0;
 const int dht11 = 4;
 const uint8_t motor1 = 6;
 const uint8_t motor2 = 7;
+const int motor_pwm = 10;
 
 // Criar instâncias das bibliotecas
 MenuLCD menu(0x27, 16, 2, botao1, botao2);               // Menu para o LCD 16x2
 ControleLuminosidade controleLuminosidade(led_uv, ldr);  // Controle de luminosidade
-ControleTemperatura controle(dht11, motor1, motor2);     // Controle de Temperatura
+ControleTemperatura controle(dht11, motor1, motor2, motor_pwm);     // Controle de Temperatura
 
 void setup() {
   // Iniciar os módulos de menu e controle serial
