@@ -3,25 +3,25 @@
 #include <MenuLCD.h>
 
 // Definir os pinos dos botões
-const uint8_t botao1_pin = 2;
-const uint8_t botao2_pin = 3;
+const uint8_t botao1 = 2;
+const uint8_t botao2 = 3;
 
 // Definir os pinos do LDR e LED
-const int pino_led = 9;
-const int pino_ldr = A0;
+const int led_uv = 9;
+const int ldr = A0;
 
 // Definir os pinos de temperatura
-#define PINO_DHT 4
-#define PINO_SAIDA1 6
-#define PINO_SAIDA2 7
+const int dht11 = 4;
+const uint8_t motor1 = 6;
+const uint8_t motor2 = 7;
 
 // Criar instâncias das bibliotecas
-MenuLCD menu(0x27, 16, 2, botao1_pin, botao2_pin);              // Menu para o LCD 16x2
-ControleLuminosidade controleLuminosidade(pino_led, pino_ldr);  // Controle de luminosidade
-ControleTemperatura controle(PINO_DHT, PINO_SAIDA1, PINO_SAIDA2);
+MenuLCD menu(0x27, 16, 2, botao1, botao2);                // Menu para o LCD 16x2
+ControleLuminosidade controleLuminosidade(led_uv, ldr);  // Controle de luminosidade
+ControleTemperatura controle(dht11, motor1, motor2);    // Controle de Temperatura
 
 void setup() {
-  // Iniciar os módulos de menu e controle de luminosidade
+  // Iniciar os módulos de menu e controle serial
   menu.iniciar();
   Serial.begin(9600);
   pinMode(5, OUTPUT);  //LED de Power
