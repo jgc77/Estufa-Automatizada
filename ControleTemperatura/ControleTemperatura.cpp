@@ -52,7 +52,7 @@ void ControleTemperatura::ligarMotor() {
   for (int pwmValor = _pwm_atual; pwmValor <= 255; pwmValor += 5) {
     analogWrite(_pino_pwm, pwmValor);
     _pwm_atual = pwmValor;  // Atualiza o valor atual do PWM
-    delay(50);  // Tempo entre os incrementos para suavizar a aceleração
+    delay(10);  // Tempo entre os incrementos para suavizar a aceleração
   }
 }
 
@@ -86,6 +86,7 @@ void ControleTemperatura::atualizar() {
       digitalWrite(_pino_saida1, LOW);   // Desliga a saída 1
       digitalWrite(_pino_saida2, LOW);   // Desliga a saída 2
       analogWrite(_pino_pwm, 0);
+      _pwm_atual = 0; //redefine o a variavel do pwm para zero, possibilitando iniciar a rampa novamente
     }
   }
 }
