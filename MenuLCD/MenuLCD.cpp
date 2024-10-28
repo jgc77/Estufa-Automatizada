@@ -95,13 +95,14 @@ byte SIMB8[8] = {
 
 MenuLCD::MenuLCD(uint8_t lcd_addr, uint8_t lcd_cols, uint8_t lcd_rows, uint8_t btn1_pin, uint8_t btn2_pin)
   : lcd(lcd_addr, lcd_cols, lcd_rows), botao_1(btn1_pin), botao_2(btn2_pin) {
-  menu_atual = 3;
+  menu_atual = 4;
   dentro_submenu = false;
   estado_anterior_botao_1 = HIGH;
   estado_anterior_botao_2 = HIGH;
-  temperatura = 0.0;
-  umidade = 0.0;
-  luminosidade = 0.0;
+  temperatura = 0;
+  umidade = 0;
+  luminosidade = 0;
+  umisolo = 0;
 }
 
 // Função para iniciar o LCD e definir botões
@@ -134,7 +135,7 @@ void MenuLCD::atualizar() {
       dentro_submenu = false;  // Voltar para o menu principal
       mostrarMenu();
     } else {
-      menu_atual = (menu_atual + 1) % 4;  // Navegar pelos menus (Limite de 4 menus)
+      menu_atual = (menu_atual + 1) % 5;  // Navegar pelos menus (Limite de 4 menus)
       mostrarMenu();
     }
     delay(200);  // Pequeno delay para evitar múltiplos cliques
@@ -187,6 +188,16 @@ void MenuLCD::atualizarUmidade() {
   }
 }
 
+void MenuLCD::atualizarUmisolo() {
+  if (dentro_submenu && menu_atual == 3) {  // Se estamos no submenu de umidade
+    lcd.setCursor(0, 1);  // Mover o cursor para a linha 2
+    lcd.print("            "); // Limpar a linha anterior
+    lcd.setCursor(0, 1);
+    lcd.print(umisolo);
+    lcd.print(" %");
+  }
+}
+
 void MenuLCD::setTemperatura(float temp) {
   temperatura = temp;
 }
@@ -197,6 +208,10 @@ void MenuLCD::setUmidade(float umid) {
 
 void MenuLCD::setLuminosidade(float lumi) {
   luminosidade = lumi;
+}
+
+void MenuLCD::setUmisolo(float umidso) {
+  umisolo = umidso;
 }
 
 void MenuLCD::mostrarMenu() {
@@ -213,6 +228,11 @@ void MenuLCD::mostrarMenu() {
       lcd.print("3. Luminosidade");
       break;
     case 3:
+      lcd.print("4.  Umidade do");
+      lcd.setCursor(6, 1);
+      lcd.print("solo");
+      break;
+    case 4:
       byte Count = 1;
       for (byte y = 0; y < 2; y++) {
         for (byte x = 0; x < 4; x++) {
@@ -226,6 +246,7 @@ void MenuLCD::mostrarMenu() {
       lcd.setCursor(4, 1);
       lcd.print("AUTOMATIZADA"); 
       break;
+
   }
 }
 
@@ -250,6 +271,12 @@ void MenuLCD::mostrarSubmenu() {
       lcd.setCursor(0, 1);
       lcd.print(luminosidade);
       lcd.print(" lux");
+      break;
+    case 3:
+      lcd.print("Umidade solo:");
+      lcd.setCursor(0, 1);
+      lcd.print(umisolo);
+      lcd.print(" %");
       break;
   }
 }

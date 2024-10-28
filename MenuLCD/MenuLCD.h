@@ -13,9 +13,11 @@ class MenuLCD {
     void atualizarLuminosidade();
     void atualizarTemperatura();
     void atualizarUmidade();
+    void atualizarUmisolo();
     void setTemperatura(float temp);
     void setUmidade(float umid);
     void setLuminosidade(float lumi);
+    void setUmisolo(float umidso);
 
   private:
     LiquidCrystal_I2C lcd;
@@ -28,6 +30,7 @@ class MenuLCD {
     float temperatura;
     float umidade;
     float luminosidade;
+    float umisolo;
     void mostrarMenu();
     void mostrarSubmenu();
 };
