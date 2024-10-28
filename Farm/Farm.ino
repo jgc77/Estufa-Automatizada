@@ -1,3 +1,4 @@
+#include <ControleIrrigacao.h>
 #include <ControleTemperatura.h>
 #include <ControleLuminosidade.h>
 #include <MenuLCD.h>
@@ -21,6 +22,7 @@ const int rele = 8;
 MenuLCD menu(0x27, 16, 2, botao1, botao2);               // Menu para o LCD 16x2
 ControleLuminosidade controleLuminosidade(led_uv, ldr);  // Controle de luminosidade
 ControleTemperatura controle(dht11, motor1, motor2, motor_pwm, rele);     // Controle de Temperatura
+ControleIrrigacao controleIrrigacao(A1);
 
 void setup() {
   // Iniciar os módulos de menu e controle serial
@@ -55,11 +57,13 @@ void loop() {
   int luminosidade = controleLuminosidade.lerLDR();
   int temperatura = controle.lerTemp();
   int umidade = controle.lerUmi();
+  int umisolo = controleIrrigacao.lersolo();
 
   // Atualizar o valor da luminosidade na biblioteca de menu
   menu.setLuminosidade(luminosidade);
   menu.setTemperatura(temperatura);
   menu.setUmidade(umidade);
+  menu.setUmisolo(umisolo);
 
   // Atualizar o menu (navegação e exibição)
   menu.atualizar();
@@ -68,6 +72,7 @@ void loop() {
   menu.atualizarLuminosidade();
   menu.atualizarTemperatura();
   menu.atualizarUmidade();
+  menu.atualizarUmisolo();
 
   // Adicionar um pequeno delay para aliviar o loop
   delay(100);
