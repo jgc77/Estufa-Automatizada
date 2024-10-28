@@ -42,9 +42,6 @@ void loop() {
 
     } else if (comando == "manual") {
       Serial.println("Modo manual ativado");
-
-    } else {
-      Serial.println("Modo invalido! Escolha entre manual e automatico.");
     }
 
     controleLuminosidade.ajustarModo(comando);  //luminosidade
