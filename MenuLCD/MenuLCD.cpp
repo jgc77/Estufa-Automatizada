@@ -177,6 +177,16 @@ void MenuLCD::atualizarTemperatura() {
   }
 }
 
+void MenuLCD::atualizarUmidade() {
+  if (dentro_submenu && menu_atual == 1) {  // Se estamos no submenu de umidade
+    lcd.setCursor(0, 1);  // Mover o cursor para a linha 2
+    lcd.print("            "); // Limpar a linha anterior
+    lcd.setCursor(0, 1);
+    lcd.print(umidade);
+    lcd.print(" %");
+  }
+}
+
 void MenuLCD::setTemperatura(float temp) {
   temperatura = temp;
 }

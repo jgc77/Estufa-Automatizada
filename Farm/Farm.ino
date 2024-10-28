@@ -15,11 +15,12 @@ const int dht11 = 4;
 const uint8_t motor1 = 6;
 const uint8_t motor2 = 7;
 const int motor_pwm = 10;
+const int rele = 8;
 
 // Criar instâncias das bibliotecas
 MenuLCD menu(0x27, 16, 2, botao1, botao2);               // Menu para o LCD 16x2
 ControleLuminosidade controleLuminosidade(led_uv, ldr);  // Controle de luminosidade
-ControleTemperatura controle(dht11, motor1, motor2, motor_pwm);     // Controle de Temperatura
+ControleTemperatura controle(dht11, motor1, motor2, motor_pwm, rele);     // Controle de Temperatura
 
 void setup() {
   // Iniciar os módulos de menu e controle serial
@@ -53,10 +54,12 @@ void loop() {
   // Obter o valor da luminosidade lida pelo LDR
   int luminosidade = controleLuminosidade.lerLDR();
   int temperatura = controle.lerTemp();
+  int umidade = controle.lerUmi();
 
   // Atualizar o valor da luminosidade na biblioteca de menu
   menu.setLuminosidade(luminosidade);
   menu.setTemperatura(temperatura);
+  menu.setUmidade(umidade);
 
   // Atualizar o menu (navegação e exibição)
   menu.atualizar();
@@ -64,6 +67,7 @@ void loop() {
   // Atualizar a luminosidade na tela
   menu.atualizarLuminosidade();
   menu.atualizarTemperatura();
+  menu.atualizarUmidade();
 
   // Adicionar um pequeno delay para aliviar o loop
   delay(100);
