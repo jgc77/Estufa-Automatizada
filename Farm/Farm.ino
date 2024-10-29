@@ -8,12 +8,12 @@ const uint8_t botao1 = 2;
 const uint8_t botao2 = 3;
 
 // Definir os pinos do LDR e LED
-const int led_uv = 9;
+const int led_uv = 6;
 const int ldr = A0;
 
 // Definir os pinos de temperatura
 const int dht11 = 4;
-const uint8_t motor1 = 6;
+const uint8_t motor1 = 9;
 const uint8_t motor2 = 7;
 const int motor_pwm = 10;
 const int rele = 8;
@@ -25,11 +25,12 @@ const long interval = 300; // Intervalo de piscar (ms)
 MenuLCD menu(0x27, 16, 2, botao1, botao2);               // Menu para o LCD 16x2
 ControleLuminosidade controleLuminosidade(led_uv, ldr);  // Controle de luminosidade
 ControleTemperatura controle(dht11, motor1, motor2, motor_pwm, rele);     // Controle de Temperatura
-ControleIrrigacao controleIrrigacao(A1);
+ControleIrrigacao controleIrrigacao(A1, 11);
 
 void setup() {
   // Iniciar os módulos de menu e controle serial
   menu.iniciar();
+  controleIrrigacao.iniciar();
   Serial.begin(9600);
   pinMode(5, OUTPUT);  //LED de Power
   Serial.println("ESTUFA AUTOMATIZADA");
@@ -55,9 +56,11 @@ void loop() {
 
     controleLuminosidade.ajustarModo(comando);  //luminosidade
     controle.ajustarModo(comando);              //temperatura
+    controleIrrigacao.ajustarModo(comando);
   }
   controleLuminosidade.atualizar();
   controle.atualizar();  //temperatura
+  controleIrrigacao.atualizar();
 
   // Obter o valor da luminosidade lida pelo LDR
   int luminosidade = controleLuminosidade.lerLDR();

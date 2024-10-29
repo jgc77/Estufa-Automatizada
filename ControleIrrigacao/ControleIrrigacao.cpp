@@ -1,18 +1,21 @@
 #include "Arduino.h"
 #include "ControleIrrigacao.h"
-//#include "Servo.h"
+#include "Servo.h"
 
 
-ControleIrrigacao::ControleIrrigacao(int pino_sens) {
- // _pino_servo = pino_servo;
+ControleIrrigacao::ControleIrrigacao(int pino_sens, int iservo) {
+
   _pino_sens = pino_sens;
+  this->_iservo = iservo;
   _modo = 0; // Modo automático por padrão
-  //umidade_limite = limite;
-  //_valor_led_manual = 0; 
-  //servo_motor.attach(_pino_servo);
-  //servo_motor.write(0); // Inicialmente em 0 graus
   ultimoTempoAtualizacao = 0; // Inicializa a última atualização
   umidadeAtual = 0; // Valor inicial da umidade
+  pinMode(iservo, OUTPUT);
+}
+
+void ControleIrrigacao::iniciar() {
+  servo_motor.attach(_iservo); // Inicia o servo
+  servo_motor.write(0);
 }
 
 void ControleIrrigacao::ajustarModo(String comando_serial) {
@@ -23,29 +26,31 @@ void ControleIrrigacao::ajustarModo(String comando_serial) {
   else if (comando_serial == "manual") {
     _modo = 1;
   }
-  //else if (_modo == 1) {
-   // if (comando_serial == "servo on") {
-    //  servo_motor.write(90);
-    //  Serial.println("Servo ligado manualmente.");
-   // } else if (comando_serial == "servo off") {
-   //   servo_motor.write(0);
-    //  Serial.println("Servo desligado manualmente.");
-    //}
- // }
+  else if (_modo == 1) {
+     if (comando_serial == "servo on") {
+       servo_motor.write(90);
+       Serial.println("Servo ligado manualmente.");
+
+      } else if (comando_serial == "servo off") {
+        servo_motor.write(0);
+        Serial.println("Servo desligado manualmente.");
+      }
+  }
 }
 
-//void ControleIrrigacao::atualizar() {
-//  if (_modo == 0) {
-  //  int valorumidade = analogRead(_pino_sens); // Lê o sensor (0 a 1023)
+void ControleIrrigacao::atualizar() {
+  if (_modo == 0) {
+    int valorumidade = analogRead(_pino_sens); // Lê o sensor (0 a 1023)
+    //Remover comentario para testes:
     //Serial.print("Valor do sensor de umidade: ");
     //Serial.println(valorumidade);
-    //if (valorumidade < umidade_limite) {
-    //  servo_motor.write(90); // Ativa o servo
-    //} else {
-    //  servo_motor.write(0); // desativa servo
-    ///}
-  //}
-//}
+    if (valorumidade > 511) {
+      servo_motor.write(90);
+    } else {
+      servo_motor.write(0);
+    }
+  }
+}
 
 int ControleIrrigacao::lersolo() {
   if (millis() - ultimoTempoAtualizacao >= intervaloAtualizacao) {
