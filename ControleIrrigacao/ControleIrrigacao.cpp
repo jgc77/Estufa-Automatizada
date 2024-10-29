@@ -2,7 +2,7 @@
 #include "ControleIrrigacao.h"
 #include "Servo.h"
 
-
+//Função inicial
 ControleIrrigacao::ControleIrrigacao(int pino_sens, int iservo) {
 
   _pino_sens = pino_sens;
@@ -13,11 +13,13 @@ ControleIrrigacao::ControleIrrigacao(int pino_sens, int iservo) {
   pinMode(iservo, OUTPUT);
 }
 
+//Função para iniciar o servo
 void ControleIrrigacao::iniciar() {
   servo_motor.attach(_iservo); // Inicia o servo
   servo_motor.write(0);
 }
 
+//Função para definir o modo manual e automatico, além de controlar o servo no modo manual
 void ControleIrrigacao::ajustarModo(String comando_serial) {
   comando_serial.trim(); // Remove espaços em branco ou novas linhas
   if (comando_serial == "automatico") {
@@ -38,6 +40,7 @@ void ControleIrrigacao::ajustarModo(String comando_serial) {
   }
 }
 
+//Função para controlar o servo no modo automatico
 void ControleIrrigacao::atualizar() {
   if (_modo == 0) {
     int valorumidade = analogRead(_pino_sens); // Lê o sensor (0 a 1023)
@@ -52,6 +55,7 @@ void ControleIrrigacao::atualizar() {
   }
 }
 
+//Função para leitura do sensor para variavel umidadeAtual
 int ControleIrrigacao::lersolo() {
   if (millis() - ultimoTempoAtualizacao >= intervaloAtualizacao) {
     ultimoTempoAtualizacao = millis();

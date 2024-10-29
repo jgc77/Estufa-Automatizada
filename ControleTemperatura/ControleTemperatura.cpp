@@ -4,12 +4,13 @@
 
 #define DHTTYPE DHT11  // Definindo o tipo de sensor DHT11
 
+//Função inicial
 ControleTemperatura::ControleTemperatura(int pino_dht, int pino_saida1, int pino_saida2, int pino_pwm, int pino_rele) {
   _pino_dht = pino_dht;
   _pino_saida1 = pino_saida1;
   _pino_saida2 = pino_saida2;
   _pino_pwm = pino_pwm;
-  _pino_rele = pino_rele; // Pino do relé para controle da umidade
+  _pino_rele = pino_rele; 
   _modo = 0;
   _manual_motor = LOW;
   _pwm_atual = 0;
@@ -19,14 +20,14 @@ ControleTemperatura::ControleTemperatura(int pino_dht, int pino_saida1, int pino
   pinMode(_pino_saida1, OUTPUT);
   pinMode(_pino_saida2, OUTPUT);
   pinMode(_pino_pwm, OUTPUT);
-  pinMode(_pino_rele, OUTPUT); // Define o pino do relé como saída
+  pinMode(_pino_rele, OUTPUT); 
 }
 
+//Função para definir o modo manual e automatico, além de controlar o motor e o relé no modo manual
 void ControleTemperatura::ajustarModo(String comando_serial) {
-  comando_serial.trim(); // Remove espaços em branco ou novas linhas
+  comando_serial.trim();
   if (comando_serial == "automatico") {
     _modo = 0;
-    //Serial.println("Modo automatico ativado.");
   } 
   else if (comando_serial == "manual") {
     _modo = 1;
@@ -42,15 +43,16 @@ void ControleTemperatura::ajustarModo(String comando_serial) {
       _manual_motor = LOW;
       Serial.println("Motor desligado manualmente.");
     } else if (comando_serial == "umi on") {
-      digitalWrite(_pino_rele, LOW); // Liga o relé
+      digitalWrite(_pino_rele, LOW);
       Serial.println("Umidificador ligado manualmente.");
     } else if (comando_serial == "umi off") {
-      digitalWrite(_pino_rele, HIGH); // desliga o relé
+      digitalWrite(_pino_rele, HIGH);
       Serial.println("Umidificador desligado manualmente.");
     }
   }
 }
 
+//Função para partida do motor com rampa de subida (pwm)
 void ControleTemperatura::ligarMotor() {
     if (_pwm_atual == 255) {
     return;
@@ -59,7 +61,7 @@ void ControleTemperatura::ligarMotor() {
   digitalWrite(_pino_saida1, LOW);
   digitalWrite(_pino_saida2, HIGH);
 
-  // Rampa de aceleração (aumenta o PWM de 0 a 255)
+  // Rampa de subida (aumenta o PWM de 0 a 255)
   for (int pwmValor = _pwm_atual; pwmValor <= 255; pwmValor += 5) {
     analogWrite(_pino_pwm, pwmValor);
     _pwm_atual = pwmValor;  // Atualiza o valor atual do PWM
@@ -67,9 +69,9 @@ void ControleTemperatura::ligarMotor() {
   }
 }
 
+//Função para controlar o led no modo automatico
 void ControleTemperatura::atualizar() {
   if (_modo == 0) {
-    // Modo automático: baseado na temperatura
     float temperatura = _dht->readTemperature();  // Lê a temperatura em Celsius
     float umidade = _dht->readHumidity(); // Lê a umidade em %
 
@@ -79,17 +81,17 @@ void ControleTemperatura::atualizar() {
     }
 
     if (umidade < 50) {
-      digitalWrite(_pino_rele, LOW); // Liga o relé
+      digitalWrite(_pino_rele, LOW); 
     } else {
-      digitalWrite(_pino_rele, HIGH); // Desliga o relé
+      digitalWrite(_pino_rele, HIGH); 
     }
 
     if (temperatura > 50) {
       ligarMotor();
 
     } else {
-      digitalWrite(_pino_saida1, LOW);  // Desliga a saída 1
-      digitalWrite(_pino_saida2, LOW);  // Desliga a saída 2
+      digitalWrite(_pino_saida1, LOW);  
+      digitalWrite(_pino_saida2, LOW);  
       analogWrite(_pino_pwm, 0);
       _pwm_atual = 0; //redefine o a variavel do pwm para zero, possibilitando iniciar a rampa novamente
     }
@@ -98,20 +100,22 @@ void ControleTemperatura::atualizar() {
       ligarMotor();
       
     } else {
-      digitalWrite(_pino_saida1, LOW);   // Desliga a saída 1
-      digitalWrite(_pino_saida2, LOW);   // Desliga a saída 2
+      digitalWrite(_pino_saida1, LOW);  
+      digitalWrite(_pino_saida2, LOW);   
       analogWrite(_pino_pwm, 0);
       _pwm_atual = 0; //redefine o a variavel do pwm para zero, possibilitando iniciar a rampa novamente
     }
   }
 }
 
+//Função para leitura do sensor para variavel temperatura
 int ControleTemperatura::lerTemp() {
-  float temperatura = _dht->readTemperature(); // Lê a temperatura em Celsius
-  return temperatura; // Retorna o valor da temperatura
+  float temperatura = _dht->readTemperature(); 
+  return temperatura; 
 }
 
+//Função para leitura do sensor para variavel umidade
 int ControleTemperatura::lerUmi() {
-  float umidade = _dht->readHumidity(); // Lê a temperatura em Celsius
-  return umidade; // Retorna o valor da temperatura
+  float umidade = _dht->readHumidity();
+  return umidade; 
 }
