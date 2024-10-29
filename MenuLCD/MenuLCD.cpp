@@ -164,7 +164,7 @@ void MenuLCD::atualizarLuminosidade() {
     lcd.print("            "); // Limpar a linha anterior
     lcd.setCursor(0, 1);
     lcd.print(luminosidade);
-    lcd.print(" lux");
+    lcd.print("Lux");
   }
 }
 
@@ -174,7 +174,8 @@ void MenuLCD::atualizarTemperatura() {
     lcd.print("            "); // Limpar a linha anterior
     lcd.setCursor(0, 1);
     lcd.print(temperatura);
-    lcd.print(" C");
+    lcd.print("C");
+    lcd.print((char)223);
   }
 }
 
@@ -184,7 +185,7 @@ void MenuLCD::atualizarUmidade() {
     lcd.print("            "); // Limpar a linha anterior
     lcd.setCursor(0, 1);
     lcd.print(umidade);
-    lcd.print(" %");
+    lcd.print("%");
   }
 }
 
@@ -194,23 +195,23 @@ void MenuLCD::atualizarUmisolo() {
     lcd.print("            "); // Limpar a linha anterior
     lcd.setCursor(0, 1);
     lcd.print(umisolo);
-    lcd.print(" %");
+    lcd.print("%");
   }
 }
 
-void MenuLCD::setTemperatura(float temp) {
+void MenuLCD::setTemperatura(int temp) {
   temperatura = temp;
 }
 
-void MenuLCD::setUmidade(float umid) {
+void MenuLCD::setUmidade(int umid) {
   umidade = umid;
 }
 
-void MenuLCD::setLuminosidade(float lumi) {
+void MenuLCD::setLuminosidade(int lumi) {
   luminosidade = lumi;
 }
 
-void MenuLCD::setUmisolo(float umidso) {
+void MenuLCD::setUmisolo(int umidso) {
   umisolo = umidso;
 }
 
@@ -258,25 +259,26 @@ void MenuLCD::mostrarSubmenu() {
       lcd.print("Temperatura:");
       lcd.setCursor(0, 1);
       lcd.print(temperatura);
-      lcd.print(" C");
+      lcd.print("C");
+      lcd.print((char)223);
       break;
     case 1:
       lcd.print("Umidade:");
       lcd.setCursor(0, 1);
       lcd.print(umidade);
-      lcd.print(" %");
+      lcd.print("%");
       break;
     case 2:
       lcd.print("Luminosidade:");
       lcd.setCursor(0, 1);
       lcd.print(luminosidade);
-      lcd.print(" lux");
+      lcd.print("Lux");
       break;
     case 3:
       lcd.print("Umidade solo:");
       lcd.setCursor(0, 1);
       lcd.print(umisolo);
-      lcd.print(" %");
+      lcd.print("%");
       break;
   }
 }
