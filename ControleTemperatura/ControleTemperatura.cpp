@@ -31,6 +31,7 @@ void ControleTemperatura::ajustarModo(String comando_serial) {
   else if (comando_serial == "manual") {
     _modo = 1;
     Serial.println("Controle a ventilação com 'motor on' e 'motor off'.");
+    Serial.println("Controle a umidade do ar com 'umi on' e 'umi off'.");
   } 
 
   else if (_modo == 1) {
@@ -41,10 +42,10 @@ void ControleTemperatura::ajustarModo(String comando_serial) {
       _manual_motor = LOW;
       Serial.println("Motor desligado manualmente.");
     } else if (comando_serial == "umi on") {
-      digitalWrite(_pino_rele, HIGH); // Liga o relé
+      digitalWrite(_pino_rele, LOW); // Liga o relé
       Serial.println("Umidificador ligado manualmente.");
     } else if (comando_serial == "umi off") {
-      digitalWrite(_pino_rele, LOW); // desliga o relé
+      digitalWrite(_pino_rele, HIGH); // desliga o relé
       Serial.println("Umidificador desligado manualmente.");
     }
   }
@@ -78,17 +79,19 @@ void ControleTemperatura::atualizar() {
     }
 
     if (umidade < 50) {
-      digitalWrite(_pino_rele, HIGH); // Liga o relé
+      digitalWrite(_pino_rele, LOW); // Liga o relé
     } else {
-      digitalWrite(_pino_rele, LOW); // Desliga o relé
+      digitalWrite(_pino_rele, HIGH); // Desliga o relé
     }
 
     if (temperatura > 50) {
-      digitalWrite(_pino_saida1, LOW);  // Desliga a saída 1 (pino 6)
-      digitalWrite(_pino_saida2, HIGH); // Liga a saída 2 (pino 7)
+      ligarMotor();
+
     } else {
       digitalWrite(_pino_saida1, LOW);  // Desliga a saída 1
       digitalWrite(_pino_saida2, LOW);  // Desliga a saída 2
+      analogWrite(_pino_pwm, 0);
+      _pwm_atual = 0; //redefine o a variavel do pwm para zero, possibilitando iniciar a rampa novamente
     }
   } else if (_modo == 1) {
     if (_manual_motor == HIGH) {
