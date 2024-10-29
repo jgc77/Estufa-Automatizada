@@ -18,6 +18,7 @@ const uint8_t motor2 = 7;
 const int motor_pwm = 10;
 const int rele = 8;
 
+//Definir tempo do led power 
 unsigned long previousMillis = 0; 
 const long interval = 300; // Intervalo de piscar (ms)
 
@@ -62,13 +63,13 @@ void loop() {
   controle.atualizar();  //temperatura
   controleIrrigacao.atualizar();
 
-  // Obter o valor da luminosidade lida pelo LDR
+  // Obter o valor da luminosidade lida pelos sensores
   int luminosidade = controleLuminosidade.lerLDR();
   int temperatura = controle.lerTemp();
   int umidade = controle.lerUmi();
   int umisolo = controleIrrigacao.lersolo();
 
-  // Atualizar o valor da luminosidade na biblioteca de menu
+  // Atualizar o valor dos sensores na biblioteca de menu
   menu.setLuminosidade(luminosidade);
   menu.setTemperatura(temperatura);
   menu.setUmidade(umidade);
@@ -83,6 +84,6 @@ void loop() {
   menu.atualizarUmidade();
   menu.atualizarUmisolo();
 
-  // Adicionar um pequeno delay para aliviar o loop
+  // delay para aliviar o loop
   delay(100);
 }
