@@ -18,6 +18,9 @@ const uint8_t motor2 = 7;
 const int motor_pwm = 10;
 const int rele = 8;
 
+unsigned long previousMillis = 0; 
+const long interval = 300; // Intervalo de piscar (ms)
+
 // Criar instâncias das bibliotecas
 MenuLCD menu(0x27, 16, 2, botao1, botao2);               // Menu para o LCD 16x2
 ControleLuminosidade controleLuminosidade(led_uv, ldr);  // Controle de luminosidade
@@ -36,7 +39,10 @@ void setup() {
 void loop() {
 
   //LED power
-  digitalWrite(5, HIGH);
+  if (millis() - previousMillis >= interval) {
+    previousMillis = millis();
+    digitalWrite(5, !digitalRead(5)); // Alterna o estado do LED
+  }
 
   if (Serial.available() > 0) {
     String comando = Serial.readStringUntil('\n');
