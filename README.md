@@ -27,3 +27,7 @@ Este repositório contém o **1º Projeto de Sistemas Embarcados** focado no des
 
 - **Botão Esquerdo**: Confirma a seleção ou retorna ao menu anterior.
 - **Botão Direito**: Navega para a direita no menu ou retorna à opção anterior.
+
+## Links:
+- https://github.com/jgc77/Estufa-Automatizada
+- https://www.tinkercad.com/things/kj5nUbN28iH-estufa-automatizada?sharecode=ryG8-UEUu79qbrlhKUh0y8Mcmv00TgAfoeZEw4P74pI
